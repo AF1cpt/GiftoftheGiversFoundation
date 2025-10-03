@@ -1,4 +1,5 @@
-The application is a comprehensive platform designed to facilitate disaster relief efforts, allowing users to report incidents, donate resources, and volunteer for tasks.
+Gift of the Givers Foundation - Web Application
+This application is a comprehensive platform designed to facilitate disaster relief efforts, allowing users to report incidents, donate resources, and volunteer for tasks.
 
 Features Implemented
 The application includes the following core features, all built on a secure and robust backend:
