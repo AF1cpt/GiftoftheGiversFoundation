@@ -1,0 +1,64 @@
+@model GiftGivers.Models.Disaster
+
+@{
+    ViewData["Title"] = "Disaster Details";
+}
+
+<h1>@Model.DisasterName</h1>
+<p class="lead text-muted">@Model.Location</p>
+<hr />
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Start Date</dt>
+            <dd class="col-sm-9">@Model.StartDate.ToShortDateString()</dd>
+            <dt class="col-sm-3">Description</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Needed Donations</h3>
+        @if (Model.Donations.Any())
+        {
+            <ul class="list-group">
+                @foreach (var item in Model.Donations)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        @item.ItemType
+                        <span class="badge bg-primary rounded-pill">@item.Quantity</span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+
+            <div class="alert alert-info"><p class="mb-0">No specific donation requests yet for this event.</p></div>
+        }
+    </div>
+    <div class="col-md-6">
+        <h3>Volunteer Tasks</h3>
+        @if (Model.VolunteerTasks.Any())
+        {
+            <ul class="list-group">
+                @foreach (var item in Model.VolunteerTasks)
+                {
+                    <li class="list-group-item">@item.TaskDescription <span class="badge bg-info float-end">@item.Status</span></li>
+                }
+            </ul>
+        }
+        else
+        {
+
+            <div class="alert alert-info"><p class="mb-0">No volunteer tasks have been posted for this event yet.</p></div>
+        }
+    </div>
+</div>
+
+<div class="mt-4">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>

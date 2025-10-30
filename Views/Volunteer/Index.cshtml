@@ -1,0 +1,54 @@
+@model IEnumerable<GiftGivers.Models.VolunteerTask>
+
+@{
+    ViewData["Title"] = "Volunteer Opportunities";
+}
+
+<h1>Volunteer Opportunities</h1>
+<p>Find a task where you can help and sign up below.</p>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>Disaster</th>
+                    <th>Task Description</th>
+                    <th>Status</th>
+                    <th class="text-center" style="width: 15%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Disaster.DisasterName</td>
+                        <td>@item.TaskDescription</td>
+                        <td>
+                            @if (item.Status == "Open")
+                            {
+                                <span class="badge bg-success">@item.Status</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">@item.Status</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            @if (item.Status == "Open")
+                            {
+                                <form asp-action="SignUp" asp-route-id="@item.TaskId" method="post">
+                                    <button type="submit" class="btn btn-sm btn-primary">Sign Up</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span>Assigned</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
