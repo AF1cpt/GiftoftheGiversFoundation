@@ -3,40 +3,97 @@
 @{
     ViewData["Title"] = "My Donations";
 }
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1>@ViewData["Title"]</h1>
-    <a asp-action="Create" class="btn btn-primary">Make a New Donation</a>
-</div>
 
-<div class="card">
-    <div class="card-body">
-        <table class="table table-striped mb-0">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Item Type</th>
-                    <th>Quantity</th>
-                    <th>For Disaster</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Any())
-                {
-                    foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.DonationDate.ToShortDateString()</td>
-                            <td>@item.ItemType</td>
-                            <td>@item.Quantity</td>
-                            <td>@item.Disaster.DisasterName</td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr><td colspan="4" class="text-center py-4">You have not made any donations yet.</td></tr>
-                }
-            </tbody>
-        </table>
+<div class="container">
+    <h1 class="display-5">@ViewData["Title"]</h1>
+    <p class="lead-subtitle">A history of your contributions.</p>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model)
+            {
+                <!-- iOS-style List Item Card -->
+                <div class="list-card">
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.Quantity x @item.ItemType</span>
+                        <span class="list-card-subtitle">For: @item.Disaster.DisasterName</span>
+                    </div>
+                    <div class="list-card-date">
+                        @item.DonationDate.ToString("dd MMM")
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">No Donations Yet</h5>
+                <p class="card-text text-muted">You have not made any donations yet.</p>
+                <a asp-action="Create" class="btn btn-primary">Make Your First Donation</a>
+            </div>
+        </div>
+    }
+
+    <div class="d-grid gap-2 mt-4">
+        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">Back to Dashboard</a>
     </div>
 </div>
+
+@section Styles {
+    <style>
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .list-card {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: var(--ios-label);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .list-card-icon {
+            font-size: 1.5rem;
+            color: var(--ios-blue);
+            margin-right: 16px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .list-card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-card-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .list-card-subtitle {
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+        }
+        /* Style for the date on the right */
+        .list-card-date {
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+            font-weight: 500;
+            margin-left: 10px;
+        }
+    </style>
+}
+

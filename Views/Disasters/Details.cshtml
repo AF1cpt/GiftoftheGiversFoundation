@@ -4,61 +4,147 @@
     ViewData["Title"] = "Disaster Details";
 }
 
-<h1>@Model.DisasterName</h1>
-<p class="lead text-muted">@Model.Location</p>
-<hr />
+<div class="container">
+    <h1 class="display-5">@Model.DisasterName</h1>
+    <p class="lead-subtitle"><i class="fa-solid fa-map-marker-alt me-2"></i>@Model.Location</p>
+    <p class="text-muted"><i class="fa-solid fa-calendar-alt me-2"></i>Started: @Model.StartDate.ToShortDateString()</p>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Start Date</dt>
-            <dd class="col-sm-9">@Model.StartDate.ToShortDateString()</dd>
-            <dt class="col-sm-3">Description</dt>
-            <dd class="col-sm-9">@Model.Description</dd>
-        </dl>
+    <!-- Description Card -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Situation Report</h5>
+            <p class="card-text">@Model.Description</p>
+        </div>
+    </div>
+
+    <!-- POE Feature 3: Resource Donation -->
+    <h2 class="section-title">Needed Donations</h2>
+    @if (Model.Donations.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model.Donations)
+            {
+                <div class.list-card">
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.ItemType</span>
+                        <span class="list-card-subtitle">Quantity: @item.Quantity</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center text-muted">
+                No specific donation requests posted yet.
+            </div>
+        </div>
+    }
+
+    <!-- POE Feature 4: Volunteer Management -->
+    <h2 class="section-title">Volunteer Tasks</h2>
+    @if (Model.VolunteerTasks.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model.VolunteerTasks)
+            {
+                <a class.list-card" asp-controller="Volunteer" asp-action="SignUp" asp-route-id="@item.TaskId">
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-hands-helping"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.TaskDescription</span>
+                        <span class="list-card-subtitle text-success">@item.Status</span>
+                    </div>
+                    <div class="list-card-chevron">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                </a>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center text-muted">
+                No volunteer tasks posted yet.
+            </div>
+        </div>
+    }
+
+    <div class="d-grid gap-2 mt-4">
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <h3>Needed Donations</h3>
-        @if (Model.Donations.Any())
-        {
-            <ul class="list-group">
-                @foreach (var item in Model.Donations)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        @item.ItemType
-                        <span class="badge bg-primary rounded-pill">@item.Quantity</span>
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
+<style>
+    /* Adding new styles for the list cards */
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--ios-secondary-label);
+        margin-top: 24px;
+        margin-bottom: 12px;
+    }
 
-            <div class="alert alert-info"><p class="mb-0">No specific donation requests yet for this event.</p></div>
-        }
-    </div>
-    <div class="col-md-6">
-        <h3>Volunteer Tasks</h3>
-        @if (Model.VolunteerTasks.Any())
-        {
-            <ul class="list-group">
-                @foreach (var item in Model.VolunteerTasks)
-                {
-                    <li class="list-group-item">@item.TaskDescription <span class="badge bg-info float-end">@item.Status</span></li>
-                }
-            </ul>
-        }
-        else
-        {
+    .list-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
 
-            <div class="alert alert-info"><p class="mb-0">No volunteer tasks have been posted for this event yet.</p></div>
-        }
-    </div>
-</div>
+    .list-card {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        text-decoration: none;
+        color: var(--ios-label);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.2s ease-in-out;
+    }
 
-<div class="mt-4">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</div>
+        .list-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+    .list-card-icon {
+        font-size: 1.5rem;
+        color: var(--ios-blue);
+        margin-right: 16px;
+        width: 30px;
+        text-align: center;
+    }
+
+    .list-card-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .list-card-title {
+        font-weight: 600;
+        font-size: 1rem;
+    }
+
+    .list-card-subtitle {
+        font-size: 0.9rem;
+        color: var(--ios-secondary-label);
+    }
+
+    .list-card-chevron {
+        font-size: 0.9rem;
+        color: var(--ios-border);
+    }
+
+    .text-success {
+        color: #34c759 !important;
+    }
+</style>

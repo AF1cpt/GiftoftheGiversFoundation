@@ -1,0 +1,150 @@
+@model GiftGivers.Models.DashboardViewModel
+
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<div class="container">
+    <h1 class="display-5">My Dashboard</h1>
+    <p class="lead-subtitle">Your contributions and upcoming tasks.</p>
+
+    <!-- POE Feature 3: My Donations -->
+    <h2 class="section-title">My Donations</h2>
+    @if (Model.UserDonations.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model.UserDonations)
+            {
+                <div class="list-card">
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-box"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.Quantity x @item.ItemType</span>
+                        <span class="list-card-subtitle">For: @item.Disaster.DisasterName</span>
+                    </div>
+                    <div class="list-card-date">
+                        @item.DonationDate.ToString("dd MMM")
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">No Donations Yet</h5>
+                <p class="card-text text-muted">You have not made any donations yet.</p>
+                <a asp-controller="Donations" asp-action="Create" class="btn btn-primary">Make Your First Donation</a>
+            </div>
+        </div>
+    }
+
+    <!-- POE Feature 4: My Volunteer Tasks -->
+    <h2 class="section-title">My Volunteer Tasks</h2>
+    @if (Model.UserTasks.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model.UserTasks)
+            {
+                <div class="list-card">
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-hands-helping"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.TaskDescription</span>
+                        <span class="list-card-subtitle">For: @item.Disaster.DisasterName</span>
+                    </div>
+                    <div class="list-card-chevron">
+                        <span class="badge @(item.Status == "Open" ? "bg-success" : "bg-secondary")">@item.Status</span>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">No Tasks</h5>
+                <p class="card-text text-muted">You have not signed up for any tasks.</p>
+                <a asp-controller="Volunteer" asp-action="Index" class="btn btn-primary">Find a Task</a>
+            </div>
+        </div>
+    }
+</div>
+
+@section Styles {
+    <style>
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--ios-secondary-label);
+            margin-top: 24px;
+            margin-bottom: 12px;
+        }
+
+        .list-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .list-card {
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            text-decoration: none;
+            color: var(--ios-label);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+
+        .list-card-icon {
+            font-size: 1.5rem;
+            color: var(--ios-blue);
+            margin-right: 16px;
+            width: 30px;
+            text-align: center;
+        }
+
+        .list-card-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-card-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .list-card-subtitle {
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+        }
+
+        .list-card-date {
+            font-size: 0.9rem;
+            color: var(--ios-secondary-label);
+            font-weight: 500;
+            margin-left: 10px;
+        }
+
+        .list-card-chevron {
+            font-size: 0.9rem;
+            color: var(--ios-border);
+        }
+
+        .text-success {
+            color: #34c759 !important;
+        }
+
+        .bg-success {
+            background-color: #34c759 !important;
+        }
+    </style>
+}

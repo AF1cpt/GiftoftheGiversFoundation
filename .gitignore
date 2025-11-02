@@ -1,3 +1,28 @@
-﻿.vs/
-bin/
-obj/
+﻿Visual Studio Cache
+
+.vs/
+.vscode/
+
+Build artifacts
+
+[Bb]in/
+[Oo]bj/
+
+User-specific files
+
+*.user
+*.suo
+*.sln.docstates
+
+Generated files
+
+*.g.cs
+*.g.i.cs
+
+Other
+
+*.tmp
+*.dbmdl
+*.swp
+*~
+*.log`

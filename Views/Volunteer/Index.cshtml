@@ -1,54 +1,78 @@
 @model IEnumerable<GiftGivers.Models.VolunteerTask>
 
 @{
-    ViewData["Title"] = "Volunteer Opportunities";
+    ViewData["Title"] = "Volunteer Tasks";
 }
 
-<h1>Volunteer Opportunities</h1>
-<p>Find a task where you can help and sign up below.</p>
+<div class="container">
+    <h1 class="display-5">@ViewData["Title"]</h1>
+    <p class="lead-subtitle">Find an open task and sign up to help.</p>
 
-<div class="card">
-    <div class="card-body">
-        <table class="table table-hover mb-0">
-            <thead>
-                <tr>
-                    <th>Disaster</th>
-                    <th>Task Description</th>
-                    <th>Status</th>
-                    <th class="text-center" style="width: 15%;">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Disaster.DisasterName</td>
-                        <td>@item.TaskDescription</td>
-                        <td>
-                            @if (item.Status == "Open")
-                            {
-                                <span class="badge bg-success">@item.Status</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-secondary">@item.Status</span>
-                            }
-                        </td>
-                        <td class="text-center">
-                            @if (item.Status == "Open")
-                            {
-                                <form asp-action="SignUp" asp-route-id="@item.TaskId" method="post">
-                                    <button type="submit" class="btn btn-sm btn-primary">Sign Up</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <span>Assigned</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @if (Model.Any())
+    {
+        <div class="list-container">
+            @foreach (var item in Model)
+            {
+                <!-- This is a mini-form that looks like a list item -->
+                <form class="list-card-form" asp-action="SignUp" asp-route-id="@item.TaskId" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="list-card-icon">
+                        <i class="fa-solid fa-hands-helping"></i>
+                    </div>
+                    <div class="list-card-content">
+                        <span class="list-card-title">@item.TaskDescription</span>
+                        <span class="list-card-subtitle">Disaster: @item.Disaster.DisasterName</span>
+                    </div>
+                    <button type-submit" class="list-card-button">
+                        Sign Up
+                    </button>
+                </form>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">No Open Tasks</h5>
+                <p class="card-text text-muted">There are no volunteer tasks available right now. Please check back later.</p>
+            </div>
+        </div>
+    }
 </div>
+
+<style>
+    /* New styles for the form-card */
+    .list-card-form {
+        display: flex;
+        align-items: center;
+        background-color: #fff;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        transition: all 0.2s ease-in-out;
+        width: 100%;
+    }
+
+        .list-card-form:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+    .list-card-button {
+        background-color: var(--ios-blue);
+        color: #fff;
+        border: none;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 8px 16px;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .list-card-button:hover {
+            background-color: #006ae0;
+        }
+</style>

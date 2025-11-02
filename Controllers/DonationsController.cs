@@ -1,7 +1,7 @@
 ﻿using GiftGivers.Data;
 using GiftGivers.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization; // Import this!
+using Microsoft.AspNetCore.Identity; // Import this!
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GiftGivers.Controllers
 {
-    [Authorize]
+    [Authorize] // This entire controller is now secure, fulfilling POE Feature 1
     public class DonationsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,41 +22,59 @@ namespace GiftGivers.Controllers
             _userManager = userManager;
         }
 
+        // GET: /Donations/
+        // Shows a list of the *current user's* donations
         public async Task<IActionResult> Index()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return Challenge(); // Fix for possible null
+            var currentUser = await _userManager.GetUserAsync(User);
+            var userDonations = await _context.Donations
+                .Where(d => d.UserId == currentUser.Id) // Only get donations for this user
+                .Include(d => d.Disaster) // Include the related Disaster data
+                .ToListAsync();
 
-            var applicationDbContext = _context.Donations
-                                               .Include(d => d.Disaster)
-                                               .Where(d => d.UserId == user.Id);
-            return View(await applicationDbContext.ToListAsync());
+            return View(userDonations);
         }
 
-        public IActionResult Create()
+        // GET: /Donations/Create
+        // This is the "Make a Donation" form
+        public async Task<IActionResult> Create()
         {
-            ViewData["DisasterId"] = new SelectList(_context.Disasters, "DisasterId", "DisasterName");
+            // We need to pass a list of disasters to the view for the dropdown
+            ViewBag.DisasterId = new SelectList(
+                await _context.Disasters.ToListAsync(),
+                "DisasterId",
+                "DisasterName"
+            );
             return View();
         }
 
+        // POST: /Donations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DonationId,DisasterId,ItemType,Quantity")] Donation donation)
+        public async Task<IActionResult> Create([Bind("ItemType,Quantity,DisasterId")] Donation donation)
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return Challenge(); // Fix for possible null
-
-            donation.UserId = user.Id;
-            donation.DonationDate = System.DateTime.Now;
+            var currentUser = await _userManager.GetUserAsync(User);
 
             if (ModelState.IsValid)
             {
+                // Assign the current user's ID and the current date
+                donation.UserId = currentUser.Id;
+                donation.DonationDate = DateTime.Now;
+
                 _context.Add(donation);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Thank you, your donation has been recorded!";
+
+                // Redirect to the user's list of donations
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DisasterId"] = new SelectList(_context.Disasters, "DisasterId", "DisasterName", donation.DisasterId);
+
+            // If the model is invalid, re-populate the dropdown and show the form again
+            ViewBag.DisasterId = new SelectList(
+                await _context.Disasters.ToListAsync(),
+                "DisasterId",
+                "DisasterName",
+                donation.DisasterId
+            );
             return View(donation);
         }
     }

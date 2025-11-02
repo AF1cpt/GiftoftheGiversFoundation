@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GiftGivers.Controllers
 {
-    [Authorize]
+    [Authorize] // Make sure only logged-in users can see this
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -21,23 +21,30 @@ namespace GiftGivers.Controllers
             _userManager = userManager;
         }
 
+        // This is the main dashboard page
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(User);
-            if (currentUser == null) return Challenge();
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
 
-            var userId = currentUser.Id;
             var viewModel = new DashboardViewModel
             {
+                // Get all donations made by this user
                 UserDonations = await _context.Donations
-                    .Where(d => d.UserId == userId)
-                    .Include(d => d.Disaster)
+                    .Where(d => d.UserId == user.Id)
+                    .Include(d => d.Disaster) // Include Disaster details
                     .OrderByDescending(d => d.DonationDate)
                     .ToListAsync(),
+
+                // Get all tasks this user has signed up for
+                // This fixes the CS1061 error by querying for 'VolunteerId'
                 UserTasks = await _context.VolunteerTasks
-                    .Where(v => v.UserId == userId)
-                    .Include(v => v.Disaster)
-                    .OrderByDescending(v => v.TaskId)
+                    .Where(t => t.VolunteerId == user.Id)
+                    .Include(t => t.Disaster) // Include Disaster details
+                    .OrderBy(t => t.Status)
                     .ToListAsync()
             };
 

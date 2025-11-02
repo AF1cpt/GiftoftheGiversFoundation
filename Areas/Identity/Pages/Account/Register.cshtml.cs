@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 
-// THIS NAMESPACE IS NOW CORRECTED
+
 namespace GiftGivers.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
@@ -23,7 +23,7 @@ namespace GiftGivers.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private string InputEmail;
+        // private string InputEmail;  <-- THIS FIELD WAS UNUSED AND IS NOW REMOVED (Fix for CS0649)
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -82,7 +82,11 @@ namespace GiftGivers.Areas.Identity.Pages.Account
                 var user = CreateUser();
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, InputEmail, CancellationToken.None);
+
+                // --- THIS IS THE FIX ---
+                // We use Input.Email (from the form) instead of the null InputEmail field
+                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

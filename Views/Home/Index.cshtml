@@ -1,8 +1,38 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <h1 class="display-5">Welcome</h1>
+    <p class="lead-subtitle">How would you like to help today?</p>
+
+    <div class="dashboard-grid">
+        <!-- Card 1: Report Disaster (Links to POE Feature 2) -->
+        <a class="action-card" asp-controller="Disaster" asp-action="Create">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span class="action-card-title">Report a Disaster</span>
+            <span class="action-card-subtitle">Let us know about an emergency.</span>
+        </a>
+
+        <!-- Card 2: Make a Donation (Links to POE Feature 3) -->
+        <a class="action-card" asp-controller="Donations" asp-action="Create">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+            <span class="action-card-title">Make a Donation</span>
+            <span class="action-card-subtitle">Donate items and supplies.</span>
+        </a>
+
+        <!-- Card 3: View Disasters -->
+        <a class="action-card" asp-controller="Disaster" asp-action="Index">
+            <i class="fa-solid fa-list-check"></i>
+            <span class="action-card-title">View Active Disasters</span>
+            <span class="action-card-subtitle">See all reported incidents.</span>
+        </a>
+
+        <!-- Card 4: Volunteer (Links to POE Feature 4) -->
+        <a class="action-card" asp-controller="Volunteer" asp-action="Index">
+            <i class="fa-solid fa-hands-helping"></i>
+            <span class="action-card-title">Sign Up to Volunteer</span>
+            <span class="action-card-subtitle">Find and sign up for tasks.</span>
+        </a>
+    </div>
 </div>
