@@ -1,38 +1,57 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="container">
-    <h1 class="display-5">Welcome</h1>
-    <p class="lead-subtitle">How would you like to help today?</p>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>How would you like to help today?</p>
+</div>
 
-    <div class="dashboard-grid">
-        <!-- Card 1: Report Disaster (Links to POE Feature 2) -->
-        <a class="action-card" asp-controller="Disaster" asp-action="Create">
-            <i class="fa-solid fa-triangle-exclamation"></i>
-            <span class="action-card-title">Report a Disaster</span>
-            <span class="action-card-subtitle">Let us know about an emergency.</span>
-        </a>
+<div class="container mt-4">
+    <div class="row">
+        <!-- CARD 1: Report a Disaster -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Report a Disaster</h5>
+                    <p class="card-text">Let us know about an emergency.</p>
+                    <a asp-controller="Disaster" asp-action="Create" class="stretched-link mt-auto"></a>
+                </div>
+            </div>
+        </div>
 
-        <!-- Card 2: Make a Donation (Links to POE Feature 3) -->
-        <a class="action-card" asp-controller="Donations" asp-action="Create">
-            <i class="fa-solid fa-hand-holding-heart"></i>
-            <span class="action-card-title">Make a Donation</span>
-            <span class="action-card-subtitle">Donate items and supplies.</span>
-        </a>
+        <!-- CARD 2: Make a Donation -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Make a Donation</h5>
+                    <p class="card-text">Donate items and supplies.</p>
+                    <a asp-controller="Donations" asp-action="Create" class="stretched-link mt-auto"></a>
+                </div>
+            </div>
+        </div>
 
-        <!-- Card 3: View Disasters -->
-        <a class="action-card" asp-controller="Disaster" asp-action="Index">
-            <i class="fa-solid fa-list-check"></i>
-            <span class="action-card-title">View Active Disasters</span>
-            <span class="action-card-subtitle">See all reported incidents.</span>
-        </a>
+        <!-- CARD 3: View Active Disasters -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">View Active Disasters</h5>
+                    <p class="card-text">See all reported incidents.</p>
+                    <a asp-controller="Disaster" asp-action="Index" class="stretched-link mt-auto"></a>
+                </div>
+            </div>
+        </div>
 
-        <!-- Card 4: Volunteer (Links to POE Feature 4) -->
-        <a class="action-card" asp-controller="Volunteer" asp-action="Index">
-            <i class="fa-solid fa-hands-helping"></i>
-            <span class="action-card-title">Sign Up to Volunteer</span>
-            <span class="action-card-subtitle">Find and sign up for tasks.</span>
-        </a>
+        <!-- CARD 4: Sign up to Volunteer -->
+        <div class="col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Sign up to Volunteer</h5>
+                    <p class="card-text">Find and sign up for tasks.</p>
+                    <a asp-controller="Volunteer" asp-action="Index" class="stretched-link mt-auto"></a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+

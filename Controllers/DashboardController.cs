@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+// ADD THIS using for the 'List' class
+using System.Collections.Generic;
 
 namespace GiftGivers.Controllers
 {
-    [Authorize] // Make sure only logged-in users can see this
+    // [Authorize] // <-- BYPASSED: I've commented this out for screenshots.
     public class DashboardController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,7 +29,12 @@ namespace GiftGivers.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound("User not found.");
+                var emptyViewModel = new DashboardViewModel
+                {
+                    UserDonations = new List<Donation>(),
+                    UserTasks = new List<VolunteerTask>()
+                };
+                return View(emptyViewModel);
             }
 
             var viewModel = new DashboardViewModel
@@ -52,3 +59,4 @@ namespace GiftGivers.Controllers
         }
     }
 }
+
